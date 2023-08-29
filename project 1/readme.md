@@ -1,0 +1,1 @@
+This script checks for a new user listed in a csv file, if the user exists, it doesn't create meanwhile if it doesn't exist it, creates the new user. Then it assigns a password for created users using OPENSSL and push the created user and password to a file.
