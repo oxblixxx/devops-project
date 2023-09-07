@@ -220,7 +220,7 @@ try {
 
 Access the queried db with your <public-ip-address/todo_list.php>
 
-![]()
+![HH]()
 
 
 Congratulations! That means the php environment is ready to connect and interact the with MYSQL server.
