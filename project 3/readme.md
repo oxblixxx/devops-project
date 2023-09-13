@@ -158,6 +158,83 @@ module.exports = router;
 
 # MODELS
 
+Models help you to ensure that all documents in a collection have the same fields and that the values of those fields are of the correct type. This can help you to write cleaner, more efficient code and to avoid errors. 
+
+Models provide a convenient way to perform CRUD (create, read, update, and delete) operations on documents. We will also use models to define the database schema.
+
+Change directory to the to-do folder, install mongoose which is a MongoDB library, it makes it easier to work with MongoDB.
+
+```
+npm install mongoose
+```
+
+In the to-do directory, create a folder for models && a file model.js.
+
+```
+mkdir models && nano model.js
+```
+
+update the model.js app with the below code.
+
+```
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+//create schema for todo
+const TodoSchema = new Schema({
+action: {
+type: String,
+required: [true, 'The todo text field is required']
+}
+})
+
+//create model for todo
+const Todo = mongoose.model('todo', TodoSchema);
+
+module.exports = Todo;
+```
+
+Remember we created a Routes folder earlier and created a file api.js in it. Update the api.js code to make use of the model. In short, delete the code and put in the below code.
+
+```
+const express = require ('express');
+const router = express.Router();
+const Todo = require('../models/todo');
+
+router.get('/todos', (req, res, next) => {
+
+//this will return all the data, exposing only the id and action field to the client
+Todo.find({}, 'action')
+.then(data => res.json(data))
+.catch(next)
+});
+
+router.post('/todos', (req, res, next) => {
+if(req.body.action){
+Todo.create(req.body)
+.then(data => res.json(data))
+.catch(next)
+}else {
+res.json({
+error: "The input field is empty"
+})
+}
+});
+
+router.delete('/todos/:id', (req, res, next) => {
+Todo.findOneAndDelete({"_id": req.params.id})
+.then(data => res.json(data))
+.catch(next)
+})
+
+module.exports = router;
+```
+
+# SETTING UP MONGODB DATABASE
+
+
+
+
 
 
 
