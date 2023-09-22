@@ -76,7 +76,7 @@ npm install express dotenv
 
 create an index.js file, open it a text editor:
 
-````
+```
 touch index.js
 nano index.js
 ```
@@ -676,7 +676,7 @@ npm run dev
 
 If there all went well and teher wsa no errors, we should have a fully functional to-do website.
 
-![to-do-website](to_do_front.jpg)
+![to-do-website](to_do-front.jpg)
 
 Hurray!!!!
 We just deployed a MERN project on AWS.
