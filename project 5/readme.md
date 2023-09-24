@@ -1,4 +1,4 @@
-# Configuring a Web Solution using WordPress CMS and MySQL RDBMS and How to Attach Storage Subsytem.
+# Configuring a Web Solution using WordPress CMS and MySQL RDBMS and How to Configure Storage Subsytem.
 
 ## Cloud Provider
 - [x] AWS
