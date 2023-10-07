@@ -34,8 +34,8 @@ Enter the below command:
 mysql -h <hostname> -u <username> -p
 ```
 
-<hostname> = MYSQL-SERVER Public-ipv4 address
-<username> = username set
+- hostname: MYSQL-SERVER Public-ipv4 address
+- username: username set
 password will be requested on prompt.
 
 then run `SHOW DATABASES;` You should see the created `testdb`. 
