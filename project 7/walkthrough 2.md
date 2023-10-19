@@ -114,4 +114,81 @@ Repeat this process for the remaining 2 servers, just that you will need to moun
 
 
 ### ATTACHING A LOAD BALANCER
-On the EC2 dashboard, click on load balancer, create an `apllication load balancer`, set it to `internet facing` , choose the `vpc and mappings for the subnet`. Under the `listeners and routing` choose `HTTP for now`, then right click on `create target group`, choose `instances` and choose the three webservers. Return to the previous page, refresh and choose the target group. Create the load balancer
+Spin up an ec2-instance to serve as a load-balance which will we using `apache`.
+
+For you security groups allow inbound rules on your lb from `port:80`, outbound rules to each of your webservers.
+
+Then in your user-data script, put this and launch instance:
+
+```sh
+#!/bin/bash
+#Install apache2
+sudo apt update
+sudo apt install apache2 -y
+sudo apt-get install libxml2-dev
+
+#Enable following modules:
+sudo a2enmod rewrite
+sudo a2enmod proxy
+sudo a2enmod proxy_balancer
+sudo a2enmod proxy_http
+sudo a2enmod headers
+sudo a2enmod lbmethod_bytraffic
+
+#Restart apache2 service
+sudo systemctl restart apache2
+```
+
+While the instance spins up, edit the security group of each webserver to allow inbound rules from the load balancer ip. Remove the http rule previously set.
+
+Configure load balancing
+
+```sh
+sudo nano /etc/apache2/sites-available/000-default.conf
+```
+
+Put this configuration there
+
+```sh
+<VirtualHost *:80>  
+</VirtualHost>
+
+<Proxy "balancer://mycluster">
+               BalancerMember http://<WebServer1-Private-IP-Address>:80 loadfactor=5 timeout=1
+               BalancerMember http://<WebServer2-Private-IP-Address>:80 loadfactor=5 timeout=1
+               BalancerMember http://<WebServer3-Private-IP-Address>:80 loadfactor=5 timeout=1
+               ProxySet lbmethod=bytraffic
+               # ProxySet lbmethod=byrequests
+ </Proxy>
+
+        ProxyPreserveHost On
+        ProxyPass / balancer://mycluster/
+        ProxyPassReverse / balancer://mycluster/
+
+```
+
+Then run `sudo systemctl restart apache2`
+
+
+On your LB server, add the private ip address of your server and the arbitary name for them in the`/etc/hosts` file, open it with your preferred editor
+
+```sh
+<WebServer1-Private-IP-Address> Web1
+<WebServer2-Private-IP-Address> Web2
+```
+
+Then update `/etc/apache2/sites-available/000-default.conf`
+
+```sh
+BalancerMember http://Web1:80 loadfactor=5 timeout=1
+BalancerMember http://Web2:80 loadfactor=5 timeout=1
+```
+
+Curl the webservers from the LB terminal `curl http://web1` or curl `curl http:web2` you should see the content of the web-server displayed. 
+
+
+ 
+  
+Congratulations!
+You have just implemented a Webserver, NFS, DB and Load balancing Web Solution for your DevOps team.
+  
