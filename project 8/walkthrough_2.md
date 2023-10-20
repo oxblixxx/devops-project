@@ -16,7 +16,7 @@ NB: When you do this, you won't be able to login with the your aws key-pair. It 
 
 2. Return to Jenkins main dashboard, install [publish over ssh](https://plugins.jenkins.io/publish-over-ssh/) on Jenkins server, navigate to manage jenkins>plugins>available plugins, then install `publish over ssh`
 
-3. Return to Jenkins dashboard, navigate to manage jenkins>system. Scroll down locate `public over ssh`
+3. Return to Jenkins dashboard, navigate to manage jenkins>system. Scroll down locate [public over ssh](https://www.serverkaka.com/2018/08/send-build-artifacts-over-ssh-jenkins.html).
 
 ![public over ssh](./assets/publish_over_ssh_1.png)
 
