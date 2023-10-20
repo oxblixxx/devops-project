@@ -22,9 +22,9 @@ NB: When you do this, you won't be able to login with the your aws key-pair. It 
 
 Put in the details of the NFS server. Under key, paste the private key there `id_rsa`. Add SSH server:
 
-hostname = can be the NFS private ip address
-username = user to authenticate login, ubuntu is used since we didn't create any user yet
-remote directory = /mnt/apps/html
+- hostname: can be the NFS private ip address
+- username: user to authenticate login, ubuntu is used since we didn't create any user yet
+- remote directory: /mnt/apps/html
 
 NB: Use `pwd` to get current working directory to navigate to and the directory should have a write priviledge set. Priviledges depends on the use case and security should be put in consideration. `sudo chmod 775 /path/to/file`
 
