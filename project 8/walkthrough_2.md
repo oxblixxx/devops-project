@@ -32,9 +32,10 @@ Ensure to test configuration with a return of success before applying and save.
 
 4. Open the project/job, navigate to configure>post-build-action. Since we want all files to be copied, we will use `**`
 
-Apply the configuration then save. Make a change from your github repo, commit changes.
+Apply the configuration then save. Make a change from your github repo, commit changes. You should get a succesfully build
 
 ![artifact-push-to-nfs](./assets/artifact_push_succss.png)
 
-Congratulations!
+Proceed to check the destination directory in your NFS server, if the files are there, Congratulations!!!
+
 You have just implemented your first Continous Integration solution using Jenkins CI. We will be checking other CI tools such as Github actions, Circle CI...
