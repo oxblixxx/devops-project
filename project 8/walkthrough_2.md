@@ -22,9 +22,9 @@ NB: When you do this, you won't be able to login with the your aws key-pair. It 
 
 Put in the details of the NFS server. Under key, paste the private key there `id_rsa`. Add SSH server:
 
-hostname = can be the NFS private ip address
-username = user to authenticate login, ubuntu is used since we didn't create any user yet
-remote directory = /mnt/apps/html
+- hostname: can be the NFS private ip address
+- username: user to authenticate login, ubuntu is used since we didn't create any user yet
+- remote directory: /mnt/apps/html
 
 NB: Use `pwd` to get current working directory to navigate to and the directory should have a write priviledge set. Priviledges depends on the use case and security should be put in consideration. `sudo chmod 775 /path/to/file`
 
@@ -32,9 +32,10 @@ Ensure to test configuration with a return of success before applying and save.
 
 4. Open the project/job, navigate to configure>post-build-action. Since we want all files to be copied, we will use `**`
 
-Apply the configuration then save. Make a change from your github repo, commit changes.
+Apply the configuration then save. Make a change from your github repo, commit changes. You should get a succesfully build
 
 ![artifact-push-to-nfs](./assets/artifact_push_succss.png)
 
-Congratulations!
+Proceed to check the destination directory in your NFS server, if the files are there, Congratulations!!!
+
 You have just implemented your first Continous Integration solution using Jenkins CI. We will be checking other CI tools such as Github actions, Circle CI...
