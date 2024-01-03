@@ -1,6 +1,6 @@
 ### SPIN UP JENKINS SERVER
 
-In this project we are going to start automating part of our routine tasks with a free and open source automation server – Jenkins. It is one of the mostl popular CI/CD tools,
+In this project we are going to start automating part of our routine tasks with a free and open source automation server – [Jenkins](https://www.jenkins.io/download/). It is one of the mostl popular CI/CD tools,
 
 Spin up an EC2 Instance, create a security group allowing `port 80` && `port 8080`. [Jenkins](https://www.jenkins.io/doc/book/installing/linux/) listens on port 8080.
 
