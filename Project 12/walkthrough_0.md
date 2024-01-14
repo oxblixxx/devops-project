@@ -49,10 +49,22 @@ pipeline {
     }
   }
 }
-
 ```
 
+Click on apply, save then run the build. Notice that the Sonarqube quality gate stage fails. Go to the Jenkins instance, update the `/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/snipe-it/conf/sonar-scanner.properties` directory with the below content
 
+```sh
+sonar.host.url=http://<sonarqube-url>:9000
+sonar.projectKey=snipe-it
+#----- Default source code encoding
+sonar.sourceEncoding=UTF-8
+sonar.php.exclusions=**/vendor/**
+sonar.php.coverage.reportPaths=build/logs/clover.xml
+sonar.php.tests.reportPath=build/logs/junit.xml
+```
+
+For the `projectKey` must be a unique name of your choice. Run the build again. It should run succesfully now.
+ 
 
 
 
