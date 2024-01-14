@@ -11,3 +11,6 @@ Proceed to run the configurations against the server, setting up the frontend, d
 ansible-playbook  -K root-playbooks/prod.yml
 ```
 
+Login to your jenkins server, navigate to plugins, install sonar scanner
+
+
