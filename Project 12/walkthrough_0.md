@@ -23,7 +23,35 @@ Then setup the sonarqube server, navigate to manage Jenkins > System > Sonar Sca
 ![sonar-installation](./images/sonar-server.png)
 
 
-Create a pipeline 
+Create a pipeline, In the definition section you can either create a pipeline script or pipeline script from scm, using from pipeline script, click on try sample pipeline > hello word to get a script template, CLick on pipeline syntax to be able to generate a pipeline script yourself using the sample step. Here is the script to use below
+
+```sh
+pipeline {
+  agent any
+
+  stages {
+    stage('Authenticate to GitHub') {
+      steps {
+        git branch: 'snipe-it',
+            url: 'https://<pat-token>:oxblixxx@github.com/oxblixxx/snipe-it/'
+      }
+    }
+
+    stage('SonarQube Quality Gate') {
+      environment {
+        scannerHome = tool '<jenkins-sonarqube-tool-name>'
+      }
+      steps {
+        withSonarQubeEnv('<jenkins-sonarqube-tool-name>') {
+          sh "${scannerHome}/bin/sonar-scanner"
+        }
+      }
+    }
+  }
+}
+
+```
+
 
 
 
