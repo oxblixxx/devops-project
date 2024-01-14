@@ -203,6 +203,10 @@ For the `projectKey` must be a unique name of your choice. Run the build again. 
 ![jenkins-success](./images/jenkins-scan-success.png)
 
 
+Go to the sonarqube console, there should be the result of the code analyis there.
+
+![jenkins-success](./images/code-scan.png)
+
 
 
 
