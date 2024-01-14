@@ -14,6 +14,8 @@ ansible-playbook  -K root-playbooks/prod.yml
 
 After succesful deployment, access the sonarqube server `<public-ip-address>:9000` the default username and password is `admin` respectively. Generate a token by clicking on the avatar of the administrator > My account > Generate token. After set the webhook for the jenkins server, click on administration > configuration > webhooks. Set the webhook just like this `http://<jenkins-server>/sonarqube-webhook/`. Click on save
 
-Login to your jenkins server, navigate to manage jenkins > plugins, install sonar scanner plugins. 
+Login to your jenkins server, navigate to manage jenkins > plugins, install sonar scanner plugins. Then navigate to manage jenkins > Tools to set up the sonnar scanner installations. 
+
+
 
 
