@@ -16,6 +16,17 @@ After succesful deployment, access the sonarqube server `<public-ip-address>:900
 
 Login to your jenkins server, navigate to manage jenkins > plugins, install sonar scanner plugins. Then navigate to manage jenkins > Tools to set up the sonnar scanner installations. 
 
+![sonar-installation](./images/sonar-install.png)
+
+Then setup the sonarqube server, navigate to manage Jenkins > System > Sonar Scanner. For the server authentication token, click on add, add a secret file with the previously generated token from sonarqube.
+
+![sonar-installation](./images/sonar-server.png)
+
+
+Create a pipeline 
+
+
+
 
 
 
