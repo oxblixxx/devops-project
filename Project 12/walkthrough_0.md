@@ -12,7 +12,7 @@ Proceed to run the configurations against the server, setting up the webserver, 
 ansible-playbook  -K root-playbooks/prod.yml
 ```
 
-After succesful deployment, access the sonarqube server
+After succesful deployment, access the sonarqube server `<public-ip-address>:9000` the default username and password is `admin` respectively 
 
 Login to your jenkins server, navigate to plugins, install sonar scanner
 
