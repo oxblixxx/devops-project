@@ -7,15 +7,16 @@ resource "aws_acm_certificate" "oxtech" {
 
 resource "aws_acm_certificate_validation" "snipe-it" {
   certificate_arn         = aws_acm_certificate.oxtech.arn
-  validation_record_fqdns = [for record in aws_route53_record.snipe-it : record.fqdn]
+  validation_record_fqdns = [
+    for record in aws_route53_record.oxtech-lava : record.fqdn if record != null
+  ]
 }
-
 
 # calling the hosted zone
- data "aws_route53_zone" "oxtech" {
-   name         = "oxtech.lava"
-   private_zone = false
-}
+#  data "aws_route53_zone" "oxtech" {
+#    name         = "oxtech.lava"
+#    private_zone = false
+# }
 
 
 
