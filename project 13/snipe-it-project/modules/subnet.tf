@@ -1,9 +1,7 @@
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zone
 # Fetch Availability zones from AWS,
 
-data "aws_availability_zones" "az" {
-  state = "available"
-}
+data "aws_availability_zones" "az" {}
 
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet
@@ -11,7 +9,9 @@ data "aws_availability_zones" "az" {
 #
 # public subnets
 resource "aws_subnet" "snipe-it-public-subnet" {
-  availability_zone = element(keys(data.aws_availability_zones.az), count.index)
+  availability_zone = element(data.aws_availability_zones.az.names, count.index)
+  #availability_zone = element(keys(data.aws_availability_zones.az), count.index)
+  # availability_zone = var.az_number[data.aws_availability_zone.az.name_suffix, count.index)
   count             = local.subnet_count 
   cidr_block = cidrsubnet(var.public_subnets_cidr, 4, count.index)
   map_public_ip_on_launch = true
@@ -24,7 +24,7 @@ resource "aws_subnet" "snipe-it-public-subnet" {
 
 resource "aws_subnet" "snipe-it-private-subnet" {
   count             = local.subnet_count
-  availability_zone = element(keys(data.aws_availability_zones.az), count.index)
+  availability_zone = element(data.aws_availability_zones.az.names, count.index)
 #  availability_zone = data.aws_availability_zones.az[count.index]  # Access AZ names directly
   cidr_block        = cidrsubnet(var.public_subnets_cidr, 4, count.index)
   vpc_id     = aws_vpc.snipe-it-vpc.id

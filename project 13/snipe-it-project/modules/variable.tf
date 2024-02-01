@@ -2,6 +2,10 @@
 #   type = string
 # }
 
+variable "aws_region" {
+  default = "us-east-1"
+}
+
 variable "subnet_number" {
   type = string
 }

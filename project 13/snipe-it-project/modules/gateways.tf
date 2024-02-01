@@ -9,13 +9,6 @@ resource "aws_internet_gateway" "snipe-it-igw" {
   }
 }
 
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway_attachment
-
-resource "aws_internet_gateway_attachment" "igw-attachment" {
-  internet_gateway_id = aws_internet_gateway.snipe-it-igw.id
-  vpc_id     = aws_vpc.snipe-it-vpc.id
-}
-
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway
 resource "aws_nat_gateway" "snipe-it-natgw" {
