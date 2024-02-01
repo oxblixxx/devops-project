@@ -20,12 +20,16 @@ resource "aws_autoscaling_notification" "asg-notifications" {
   topic_arn = aws_sns_topic.asg-sns.arn
 }
 
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region
+data "aws_region" "az" {
+  name = "us-east-1"
+}
+
 
 # https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/shuffle
-
 # ---- Launch templates for bastion host
 resource "random_shuffle" "az-list" {
-  input = data.aws_availability_zones.available.names
+  input = data.aws_region.az.name
 }
 
 

@@ -1,7 +1,7 @@
 # https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
 # 
 
-module "snipe-it" {
+module "snipe-it-vpc" {
   source = "terraform-aws-modules/vpc/aws"
   azs             = length(var.azs)
   cidr = var.cidr_block
