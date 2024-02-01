@@ -15,8 +15,10 @@ resource "aws_sns_topic" "asg-sns" {
 
 # ---- Creating notification for all ASG.
 resource "aws_autoscaling_notification" "asg-notifications" {
-  group_names = aws_autoscaling_group.snipe-it-asg.name
-
+  group_names = [
+    aws_autoscaling_group.snipe-it-asg,
+    aws_autoscaling_group.bastion-asg
+  ]  
   notifications = [
     "autoscaling:EC2_INSTANCE_LAUNCH",
     "autoscaling:EC2_INSTANCE_TERMINATE",
@@ -47,6 +49,7 @@ resource "aws_key_pair" "snipe-it-kp" {
 
 resource "aws_launch_template" "bastion-launch-template" {
   image_id               = var.ami
+  count = local.subnet_count
   instance_type          = var.instance-type
   vpc_security_group_ids = [aws_security_group.bastion_sg.id]
 
@@ -98,7 +101,7 @@ resource "aws_autoscaling_group" "bastion-asg" {
   ]
 
   launch_template {
-    id      = aws_launch_template.bastion-launch-template.id
+    id      = aws_launch_template.bastion-launch-template[count.index].id
     version = "$Latest"
   }
   tag {
@@ -109,6 +112,15 @@ resource "aws_autoscaling_group" "bastion-asg" {
 
 }
 
+# resource "aws_autoscaling_attachment" "asg-attachment-bastion" {
+#   count = local.subnet_count
+#   autoscaling_group_name = aws_autoscaling_group.bastion-asg[count.index].id
+#   lb_target_group_arn    = aws_lb_target_group.bastion-tgt.arn
+# }
+
+
+
+
 
 # ---- Launch template for snipe-it
 
@@ -116,7 +128,7 @@ resource "aws_launch_template" "snipe-it-launch-template" {
   image_id               = var.ami
   instance_type          = var.instance-type
   vpc_security_group_ids = [aws_security_group.webserver-sg.id]
-
+  count = local.subnet_count
   iam_instance_profile {
     name = aws_iam_instance_profile.ec2-ip.id
   }
@@ -164,7 +176,7 @@ resource "aws_autoscaling_group" "snipe-it-asg" {
   ]
 
   launch_template {
-    id      = aws_launch_template.snipe-it-launch-template.id
+    id      = aws_launch_template.snipe-it-launch-template[count.index].id
     version = "$Latest"
   }
   tag {
@@ -176,7 +188,8 @@ resource "aws_autoscaling_group" "snipe-it-asg" {
 
 # ---- Attaching autoscaling group of  snipe-it application to internal loadbalancer
 resource "aws_autoscaling_attachment" "asg-attachment-snipe-it" {
-  autoscaling_group_name = aws_autoscaling_group.snipe-it-asg.id
+  count = local.subnet_count
+  autoscaling_group_name = aws_autoscaling_group.snipe-it-asg[count.index].id
   lb_target_group_arn    = aws_lb_target_group.snipe-it-tgt.arn
 }
 
