@@ -15,9 +15,10 @@ resource "aws_sns_topic" "asg-sns" {
 
 # ---- Creating notification for all ASG.
 resource "aws_autoscaling_notification" "asg-notifications" {
+  count = local.subnet_count
   group_names = [
-    aws_autoscaling_group.snipe-it-asg,
-    aws_autoscaling_group.bastion-asg
+    aws_autoscaling_group.snipe-it-asg[count.index].name,
+    aws_autoscaling_group.bastion-asg[count.index].name
   ]  
   notifications = [
     "autoscaling:EC2_INSTANCE_LAUNCH",

@@ -49,6 +49,6 @@ resource "aws_network_interface" "net-if" {
 resource "aws_network_interface_attachment" "net-if-attach" {
   count = local.subnet_count
   instance_id          = aws_instance.bastion-host[count.index].id
-  network_interface_id = aws_network_interface.net-if[count.index]
+  network_interface_id = aws_network_interface.net-if[count.index].id
   device_index         = 0
 }
