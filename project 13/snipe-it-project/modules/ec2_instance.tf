@@ -1,9 +1,9 @@
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
 
 resource "aws_instance" "bastion-host" {
-  ami           = var.ami-image # us-west-2
-  instance_type = "t2.micro"
-  
+  ami           = var.ami # us-west-2
+  instance_type = var.instance-type
+
   associate_public_ip_address = true
 
 
@@ -19,9 +19,9 @@ resource "aws_instance" "bastion-host" {
 
 
 resource "aws_instance" "web-server" {
-  ami           = var.ami-image 
-  instance_type = "t2.micro"
-  
+  ami           = var.ami
+  instance_type = var.instance-type
+
   network_interface {
     network_interface_id = aws_network_interface.net-if.id
     device_index         = 0
@@ -35,7 +35,7 @@ resource "aws_instance" "web-server" {
 
 
 resource "aws_network_interface" "net-if" {
-  count = length(var.public_subnets)
+  # count = length(var.public_subnets)
 
   subnet_id       = module.snipe-it-vpc.public_subnets[2]
   private_ips     = ["10.0.0.50"]

@@ -11,11 +11,11 @@ data "aws_availability_zone" "az" {
 #
 # public subnets
 resource "aws_subnet" "snipe-it-public-subnet" {
-  availability_zone = length(data.aws_availability_zone.az[count.index])
-  count = var.subnet_number == null ? length(data.aws.availability_zone.az[count.index]) : var.subnet_number 
-  cidr_block = cidrsubnet(var.public_subnets_cidr, 4, count.index)
+  availability_zone       = length(data.aws_availability_zone.az[count.index])
+  count                   = var.subnet_number == null ? length(data.aws.availability_zone.az[count.index]) : var.subnet_number
+  cidr_block              = cidrsubnet(var.public_subnets_cidr, 4, count.index)
   map_public_ip_on_launch = true
-  vpc_id     = aws_vpc.snipe-it-vpc.id
+  vpc_id                  = aws_vpc.snipe-it-vpc.id
 
   tags = {
     Name = "$(var.name}-public-subnet"
