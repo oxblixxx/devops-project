@@ -1,7 +1,8 @@
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table
 # Create public route table
 resource "aws_route_table" "publ-rtbl" {
-  vpc_id = module.snipe-it-vpc.id
+  vpc_id     = aws_vpc.snipe-it-vpc.id
+  
 
   # route {
   #   cidr_block = "10.0.1.0/24"
@@ -15,7 +16,7 @@ resource "aws_route_table" "publ-rtbl" {
 
 # Create private route table
 resource "aws_route_table" "priv-rtbl" {
-  vpc_id = module.snipe-it-vpc.id
+  vpc_id     = aws_vpc.snipe-it-vpc.id
 
   tags = {
     Environment = "dev"

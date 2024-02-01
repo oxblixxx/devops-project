@@ -3,7 +3,8 @@
 resource "aws_security_group" "ext-lb-sg" {
   name        = "allow_tls"
   description = "Allow TLS inbound traffic"
-  vpc_id      = module.snipe-it-vpc.id
+  vpc_id     = aws_vpc.snipe-it-vpc.id
+
 
   ingress {
     description = "HTTPS"
@@ -50,7 +51,8 @@ resource "aws_security_group" "ext-lb-sg" {
 
 resource "aws_security_group" "bastion_sg" {
   name        = "vpc_web_sg"
-  vpc_id      = aws_vpc.main.id
+  vpc_id     = aws_vpc.snipe-it-vpc.id
+
   description = "Allow incoming SSH connections."
 
   ingress {
@@ -74,7 +76,7 @@ resource "aws_security_group" "bastion_sg" {
 
 resource "aws_security_group" "int-lb-sg" {
   name   = "my-alb-sg"
-  vpc_id = aws_vpc.main.id
+  vpc_id     = aws_vpc.snipe-it-vpc.id
 
   egress {
     from_port   = 0
@@ -105,7 +107,9 @@ resource "aws_security_group_rule" "inbound-alb-https" {
 # security group for webservers, to allow access from the internal load balancer and bastion instance only.
 resource "aws_security_group" "webserver-sg" {
   name   = "my-asg-sg"
-  vpc_id = aws_vpc.main.id
+  vpc_id     = aws_vpc.snipe-it-vpc.id
+
+
 
   egress {
     from_port   = 0
@@ -145,7 +149,8 @@ resource "aws_security_group_rule" "inbound-webserver-ssh" {
 # security group for datalayer to alow traffic from websever on nfs and mysql port and bastiopn host on mysql port
 resource "aws_security_group" "datalayer-sg" {
   name   = "datalayer-sg"
-  vpc_id = aws_vpc.main.id
+  vpc_id     = aws_vpc.snipe-it-vpc.id
+
 
   egress {
     from_port   = 0

@@ -1,7 +1,7 @@
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway
 
 resource "aws_internet_gateway" "snipe-it-igw" {
-  vpc_id = module.snipe-it.id
+  vpc_id     = aws_vpc.snipe-it-vpc.id
 
   tags = {
     Environment = "test"
@@ -13,7 +13,7 @@ resource "aws_internet_gateway" "snipe-it-igw" {
 
 resource "aws_internet_gateway_attachment" "igw-attachment" {
   internet_gateway_id = aws_internet_gateway.snipe-it-igw.id
-  vpc_id              = module.snipe-it.id
+  vpc_id     = aws_vpc.snipe-it-vpc.id
 }
 
 

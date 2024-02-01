@@ -38,7 +38,8 @@ resource "aws_lb_target_group" "snipe-it-tgt" {
   port        = 443
   protocol    = "HTTPS"
   target_type = "instance"
-  vpc_id      = aws_vpc.main.id
+  vpc_id     = aws_vpc.snipe-it-vpc.id
+  
 }
 
 
@@ -99,7 +100,7 @@ resource "aws_lb_target_group" "wordpress-tgt" {
   port        = 443
   protocol    = "HTTPS"
   target_type = "instance"
-  vpc_id      = aws_vpc.main.id
+  vpc_id     = aws_vpc.snipe-it-vpc.id
 }
 
 
