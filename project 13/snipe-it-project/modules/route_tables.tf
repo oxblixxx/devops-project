@@ -38,7 +38,7 @@ resource "aws_route" "publ-rtbl-route" {
 resource "aws_route_table_association" "publ-subnets-assoc" {
   count          = length(aws_subnet.snipe-it-public-subnet[*].id)
   subnet_id      = element(aws_subnet.snipe-it-public-subnet[*].id, count.index)
-  route_table_id = aws_route_table.publ-crtbl.id
+  route_table_id = aws_route_table.publ-rtbl.id
 }
 
 
@@ -56,7 +56,7 @@ resource "aws_route" "priv-rtbl-route" {
 resource "aws_route_table_association" "priv-subnets-assoc" {
   count          = length(aws_subnet.snipe-it-private-subnet[*].id)
   subnet_id      = element(aws_subnet.snipe-it-private-subnet[*].id, count.index)
-  route_table_id = aws_route_table.rtbl.id
+  route_table_id = aws_route_table.priv-rtbl.id
 }
 
 

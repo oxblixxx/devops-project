@@ -8,8 +8,8 @@ resource "aws_lb" "ext-alb" {
   ]
 
   subnets = [
-    aws_subnet.public[0].id,
-    aws_subnet.public[1].id
+    aws_subnet.snipe-it-public-subnet[0].id,
+    aws_subnet.snipe-it-public-subnet[1].id
   ]
 
   #    tags = merge(
@@ -44,17 +44,17 @@ resource "aws_lb_target_group" "snipe-it-tgt" {
 
 
 # Create a listener rule
-resource "aws_lb_listener" "snipe-it-listner" {
-  load_balancer_arn = aws_lb.ext-alb.arn
-  port              = 443
-  protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate_validation.oyindamola.certificate_arn
+# resource "aws_lb_listener" "snipe-it-listner" {
+#   load_balancer_arn = aws_lb.ext-alb.arn
+#   port              = 443
+#   protocol          = "HTTPS"
+#   certificate_arn   = aws_acm_certificate_validation.oyindamola.certificate_arn
 
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.snipe-it-tgt.arn
-  }
-}
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.snipe-it-tgt.arn
+#   }
+# }
 
 
 
@@ -70,8 +70,8 @@ resource "aws_lb" "int-lb" {
   ]
 
   subnets = [
-    aws_subnet.private[0].id,
-    aws_subnet.private[1].id
+    aws_subnet.snipe-it-private-subnet[0].id,
+    aws_subnet.snipe-it-private-subnet[1].id
   ]
 
   # tags = merge(
@@ -105,15 +105,15 @@ resource "aws_lb_target_group" "wordpress-tgt" {
 
 
 
-resource "aws_lb_listener" "web-listener" {
-  load_balancer_arn = aws_lb.ialb.arn
-  port              = 443
-  protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate_validation.oyindamola.certificate_arn
+# resource "aws_lb_listener" "web-listener" {
+#   load_balancer_arn = aws_lb.int-lb.arn
+#   port              = 443
+#   protocol          = "HTTPS"
+#   certificate_arn   = aws_acm_certificate_validation.oxtech.certificate_arn
 
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.wordpress-tgt.arn
-  }
-}
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.wordpress-tgt.arn
+#   }
+# }
 

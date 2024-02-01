@@ -19,8 +19,9 @@ resource "aws_internet_gateway_attachment" "igw-attachment" {
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway
 resource "aws_nat_gateway" "snipe-it-natgw" {
-  allocation_id = aws_eip.nat-eip.id
-  subnet_id     = aws_subnet.example.id
+  count = local.subnet_count
+  allocation_id = aws_eip.nat-eip[count.index].id
+  subnet_id     = aws_subnet.snipe-it-private-subnet[count.index].id
 
   tags = {
     Name = "gw NAT"
@@ -34,13 +35,15 @@ resource "aws_nat_gateway" "snipe-it-natgw" {
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip
 resource "aws_network_interface" "private-ip-gw" {
-  subnet_id   = aws_subnet.snipe-it-private-subnet.id
+  count = local.subnet_count
+  subnet_id   = aws_subnet.snipe-it-private-subnet[count.index].id
   private_ips = ["10.0.0.10", "10.0.0.11"]
 }
 
-resource "aws_eip" "private-subnet" {
+resource "aws_eip" "nat-eip" {
+  count = local.subnet_count
   domain                    = "vpc"
-  network_interface         = aws_network_interface.private-ip-gw.id
+  network_interface         = aws_network_interface.private-ip-gw[count.index].id
   associate_with_private_ip = "10.0.0.10"
   depends_on = [aws_internet_gateway.snipe-it-igw]
 }

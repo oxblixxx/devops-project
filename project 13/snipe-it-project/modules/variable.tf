@@ -1,6 +1,6 @@
-variable "azs" {
-  type = string
-}
+# variable "azs" {
+#   type = string
+# }
 
 variable "subnet_number" {
   type = string

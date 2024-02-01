@@ -53,7 +53,7 @@ resource "aws_iam_policy" "ec2-policy" {
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment
  resource "aws_iam_role_policy_attachment" "ec2-policy-attach" {
-        role       = aws_iam_role.ec2_instance_role.ec2-instance-role
+        role       = aws_iam_role.ec2-instance-role.id
         policy_arn = aws_iam_policy.ec2-policy.arn
     }
 
@@ -61,7 +61,7 @@ resource "aws_iam_policy" "ec2-policy" {
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile
   resource "aws_iam_instance_profile" "ec2-ip" {
         name = "aws_instance_profile_ec2-snipe-it"
-        role =  aws_iam_role.ec2_instance_role.ec2_instance_role
+        role =  aws_iam_role.ec2-instance-role.id
     }
   
     

@@ -1,5 +1,12 @@
-# https://docs.aws.amazon.com/sns/?icmpid=docs_homepage_appintegration
+                                                #-----------------#
+                                                #-----AUTO--------#
+                                                #----SCALING------#
+                                                #----GROUP--------# 
 
+
+
+
+# https://docs.aws.amazon.com/sns/?icmpid=docs_homepage_appintegration
 # Creating sns topic for all the auto scaling groups
 resource "aws_sns_topic" "asg-sns" {
   name = "Default_CloudWatch_Alarms_Topic"
@@ -21,16 +28,16 @@ resource "aws_autoscaling_notification" "asg-notifications" {
 }
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region
-data "aws_region" "az" {
-  name = "us-east-1"
-}
+# data "aws_region" "az" {
+#   name = "us-east-1"
+# }
 
 
 # https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/shuffle
 # ---- Launch templates for bastion host
-resource "random_shuffle" "az-list" {
-  input = data.aws_region.az.name
-}
+# resource "random_shuffle" "az-list" {
+#   input = data.aws_region.az.name
+# }
 
 
 resource "aws_key_pair" "snipe-it-kp" {
@@ -50,7 +57,9 @@ resource "aws_launch_template" "bastion-launch-template" {
   key_name = aws_key_pair.snipe-it-kp.key_name
 
   placement {
-    availability_zone = "random_shuffle.az-list.result"
+  availability_zone = element(keys(data.aws_availability_zones.az), count.index)
+
+#    availability_zone = "random_shuffle.az-list.result"
   }
 
   lifecycle {
@@ -76,6 +85,7 @@ resource "aws_launch_template" "bastion-launch-template" {
 
 resource "aws_autoscaling_group" "bastion-asg" {
   name                      = "bastion-asg"
+  count = local.subnet_count
   max_size                  = 2
   min_size                  = 1
   health_check_grace_period = 300
@@ -83,8 +93,8 @@ resource "aws_autoscaling_group" "bastion-asg" {
   desired_capacity          = 1
 
   vpc_zone_identifier = [
-    aws_subnet.public[0].id,
-    aws_subnet.public[1].id
+    aws_subnet.snipe-it-public-subnet[count.index].id,
+    aws_subnet.snipe-it-public-subnet[count.index].id
   ]
 
   launch_template {
@@ -114,7 +124,9 @@ resource "aws_launch_template" "snipe-it-launch-template" {
   key_name = aws_key_pair.snipe-it-kp.key_name
 
   placement {
-    availability_zone = "random_shuffle.az-list.result"
+  availability_zone = element(keys(data.aws_availability_zones.az), count.index)
+ 
+ #   availability_zone = "random_shuffle.az-list.result"
   }
 
   lifecycle {
@@ -132,13 +144,14 @@ resource "aws_launch_template" "snipe-it-launch-template" {
     #   )
   }
 
-  user_data = filebase64("${path.module}/wordpress.sh")
+  user_data = filebase64("${path.module}/bastion.sh")
 }
 
 # ---- Autoscaling for wordpress application
 
 resource "aws_autoscaling_group" "snipe-it-asg" {
   name                      = "snipe-it-asg"
+  count = local.subnet_count
   max_size                  = 2
   min_size                  = 1
   health_check_grace_period = 300
@@ -146,8 +159,8 @@ resource "aws_autoscaling_group" "snipe-it-asg" {
   desired_capacity          = 1
   vpc_zone_identifier = [
 
-    aws_subnet.private[0].id,
-    aws_subnet.private[1].id
+    aws_subnet.snipe-it-private-subnet[count.index].id,
+    aws_subnet.snipe-it-private-subnet[count.index].id
   ]
 
   launch_template {
