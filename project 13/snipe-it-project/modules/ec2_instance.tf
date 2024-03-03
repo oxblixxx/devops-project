@@ -37,7 +37,7 @@ resource "aws_instance" "web-server" {
 resource "aws_network_interface" "net-if" {
   count = local.subnet_count
   subnet_id       = aws_subnet.snipe-it-public-subnet[count.index].id
-  private_ips     = ["10.0.0.50"]
+  private_ips     = ["172.31.10.10"]
   security_groups = [aws_security_group.bastion_sg.id]
 
   # attachment {

@@ -13,7 +13,7 @@ resource "aws_subnet" "snipe-it-public-subnet" {
   #availability_zone = element(keys(data.aws_availability_zones.az), count.index)
   # availability_zone = var.az_number[data.aws_availability_zone.az.name_suffix, count.index)
   count             = local.subnet_count 
-  cidr_block = cidrsubnet(var.public_subnets_cidr, 4, count.index)
+  cidr_block = cidrsubnet(var.vpc_cidr_block, 4, count.index *2)
   map_public_ip_on_launch = true
   vpc_id     = aws_vpc.snipe-it-vpc.id
   tags = {
@@ -26,7 +26,7 @@ resource "aws_subnet" "snipe-it-private-subnet" {
   count             = local.subnet_count
   availability_zone = element(data.aws_availability_zones.az.names, count.index)
 #  availability_zone = data.aws_availability_zones.az[count.index]  # Access AZ names directly
-  cidr_block        = cidrsubnet(var.public_subnets_cidr, 4, count.index)
+  cidr_block        = cidrsubnet(var.vpc_cidr_block, 3, count.index * 2)
   vpc_id     = aws_vpc.snipe-it-vpc.id
   # ... other configuration ...
 }

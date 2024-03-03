@@ -1,6 +1,7 @@
 # create an ALB to balance the traffic between the Instances
 
 resource "aws_lb" "ext-alb" {
+  count = local.subnet_count
   name     = "ext-alb"
   internal = false
   security_groups = [
@@ -8,8 +9,8 @@ resource "aws_lb" "ext-alb" {
   ]
 
   subnets = [
-    aws_subnet.snipe-it-public-subnet[0].id,
-    aws_subnet.snipe-it-public-subnet[1].id
+    aws_subnet.snipe-it-public-subnet[count.index].id,
+    aws_subnet.snipe-it-public-subnet[count.index].id
   ]
 
   #    tags = merge(
@@ -65,13 +66,14 @@ resource "aws_lb_target_group" "snipe-it-tgt" {
 resource "aws_lb" "int-lb" {
   name     = "ialb"
   internal = true
+  count = local. subnet_count
   security_groups = [
     aws_security_group.int-lb-sg.id,
   ]
 
   subnets = [
-    aws_subnet.snipe-it-private-subnet[0].id,
-    aws_subnet.snipe-it-private-subnet[1].id
+    aws_subnet.snipe-it-private-subnet[count.index].id,
+    aws_subnet.snipe-it-private-subnet[count.index].id
   ]
 
   # tags = merge(

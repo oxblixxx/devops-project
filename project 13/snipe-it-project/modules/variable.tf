@@ -18,14 +18,15 @@ variable "subnet_number" {
 #   type = string
 # }
 
+# variable "public_subnets_cidr" {
+#   type = string
+#   default = "172.31.0.0/16"  // Assuming this is the correct CIDR block
+# }
 
-variable "public_subnets_cidr" {
-  type = string
-}
-
-variable "private_subnets_cidr" {
-  type = string
-}
+# variable "private_subnets_cidr" {
+#   type = string
+#   default = "192.168.0.0/16" 
+# }
 
 
 variable "env-value" {
@@ -36,8 +37,8 @@ variable "env-key" {
   default = ["Terraform", "Environment"]
 }
 
-variable "cidr_block" {
-  default = "10.0.0.0/24"
+variable "vpc_cidr_block" {
+  default = "172.31.0.0/16"
   type    = string
 }
 

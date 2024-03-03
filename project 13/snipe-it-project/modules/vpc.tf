@@ -3,11 +3,9 @@
 
 
 resource "aws_vpc" "snipe-it-vpc" {
-  cidr_block = var.cidr_block
+  cidr_block = var.vpc_cidr_block
   enable_dns_hostnames = true
   enable_dns_support = true
-
-
 }
 
 # module "snipe-it-vpc" {
