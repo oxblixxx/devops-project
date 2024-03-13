@@ -2,7 +2,7 @@
 
 Spin up 3 webserver instances.
 
-Install NFS CLIENT && MYSQL CLIENT && APACHE2 && INSTALL PHP DEPENDENCIES, after the installation of `MYSQL-CLIENT` just like we did in ![project-6](https://github.com/oxblixxx/devops-project/tree/main/project%206) setup the MYSQL connection.
+Install NFS CLIENT && MYSQL CLIENT && APACHE2 && INSTALL PHP DEPENDENCIES, after the installation of `MYSQL-CLIENT` just like we did in [project-6](https://github.com/oxblixxx/devops-project/tree/main/project%206) setup the MYSQL connection.
 
 ```sh
 sudo apt update
