@@ -10,3 +10,4 @@ This project illustrates the implementation of NFS Mount point across webservers
 # REFS 
 [HOW TO SET UP A NFS](https://tldp.org/HOWTO/NFS-HOWTO/server.html)
 
+![LB-SERVER-MYSQL-NFS](./images/NFS-LB-MYSQL-WEBSERVER.png)
