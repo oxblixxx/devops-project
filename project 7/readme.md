@@ -1,5 +1,5 @@
-This project illustrates the implementation of NFS Mount point across webservers for `data centralization` and using apache as a `loadbalancer`. Also, in this project you will implement a solution that consists of following components:
-
+This project illustrates the implementation of NFS server for centralized storage across webservers, configuring MySQL for database management, deploying multiple web servers with Apache and PHP,and integrating load balancing to distribute traffic evenly across the web servers. This setup ensures high availability, fault tolerance, and seamless operation, catering to the needs of a dynamic and high-demand DevOps environment. Also, in the project consists of following components:
+ 
 1. CSP: AWS
 2. Webserver Linux: Ubuntu
 3. Database Server: Ubuntu 20.04 + MySQL
