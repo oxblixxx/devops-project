@@ -6,7 +6,9 @@ This project illustrates the implementation of NFS server for centralized storag
 4. Programming Language: PHP
 5. Code Repository: GitHub
 
+This project is further improved configuring Jenkins to automatically deploy source code changes from Git to the NFS server and copy successful builds over SSH to the NFS server.
 
+[Jenkins-Artifact-Copy-To-Nfs](https://github.com/oxblixxx/devops-project/tree/main/project%208)
 # REFS 
 [HOW TO SET UP A NFS](https://tldp.org/HOWTO/NFS-HOWTO/server.html)
 
