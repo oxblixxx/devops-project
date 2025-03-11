@@ -1,65 +1,71 @@
 # Setting up a LEMP STACK(Linux, Nginx, PHP, MySql)
+A LEMP stack is used build and run dynamic websites and web applications. The acronym LEMP comprises of Linux, Nginx, Mysql and PHP. 
 
-# Spin up a Linux server
+# Setting up a Linux Server.
+For this project, an ubuntu virtual machine (VM) is spinned up on AWS to serve as the foundation for our application. To ensure secure and efficient access, configured the server's security group settings to allow traffic on key ports 22, 80 and 443. A key pair is generated and private key is used to securely log in and manage the server remotely. A set of initial commands is executed to prepare the environment for the project.
 
-## Spin up a Linux distro of your choice, I spinned up an Ubuntu distro. Allow inbound rules of port 80 and port 22 for ssh.
-# Install nginx
-
-## Ssh into the instance and update the linux distro and run the command to install Nginx on your server. 
-
-``sh
+```sh
 sudo apt update -y
 sudo apt upgrade -y
-sudo apt install nginx -y
-``
+```
 
-## thereafter confirm to see that Nginx is install on your server accessing it with <publicipaddres>:80. You can also run this commands below on your terminal:
+# Setting up Nginx
+Nginx is a high-performance web server that handles HTTP requests and serves static content. It can also act as a reverse proxy and load balancer. To install Nginx on the VM, execute the below commands.
+
+```sh
+sudo apt install nginx -y
+sudo systemctl enable nginx
+```
+
+After completing the installation and configuration of Nginx, the next step is to verify that it is running correctly on your server. From the terminal, this can be verified by executing the below command:
+
+```sh
+sudo systemctl status nginx
+```
+
+The result should prompt that Nginx is running. Also Nginx installation can be confirmed using the curl command. To do this, you can access Nginx by entering the server's public IP address followed by port 80 in a web browser (e.g., http://<public_ip_address>:80). If Nginx is set up properly, the  default Nginx welcome page should be displated.
 
 ```sh
 curl http://localhost:80
 curl http://127.0.0.1:80
 ```
 
-# Install MySql
+# Setting up MySql
+MySQL is an open-source relational database management system (RDBMS) that is widely used for storing, managing, and retrieving structured data. Execute the below command to install MySQL and to verify it's installation
 
-MySQL is an open-source relational database management system (RDBMS) that is widely used for storing, managing, and retrieving structured data. To install MySql run :
-
-``
+```sh
 sudo apt install mysql-server -y
-``
-
-The database needs to be secured by running a script. Follow the prompt to set the password security.
-NB: This is the administrator of the database and the password should be secured. Run
-
+sudo systemctl status mysql
 ```
+
+While MySQL is a powerful and reliable database management system, it is crucial to implement security measures to protect your data from unauthorized access and potential threats. Run the security script and follow the prompts, also ensure to remove **ANONYMOUS USERS**.
+
+```sh
 sudo mysql_secure_installation
 ```
 
-Login into the console with:
+Proceed to login into the console, then set the password for the root user. Be mindful of the semi-colon and the inverted comma wrapping the password.
 
-``
+```sh
 sudo mysql
-``
+```
 
 Then set the password for the root user. Be mindful of the semi-colon and the inverted comma wrapping the password.
 
-``
+```
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'put-in-your-preffered-password';
-``
-
-exit the mysql with the exit command.
-
-login back to MySql console with sudo Mysql -p then put in
-
-# Install php
-
-Install PHP packages :
-
-```
-sudo apt install php-fpm php-mysql -y
 ```
 
-# CONFIGURING NGINX 
+Exit the mysql with the `exit` command. Login back to MySql console with `sudo Mysql -u root -p` then put in password.
+
+# Setting up php
+To set up the environment for PHP and ensure it works seamlessly with the LEMP stack (Linux, Nginx, MySQL, PHP), you need to install the necessary PHP dependencies. These dependencies include the PHP core, extensions, and modules required to run PHP scripts, interact with the web server (Nginx), and communicate with the database (MySQL).
+
+```sh
+sudo apt install php-fpm php-mysql php-cli php-curl php-gd php-mbstring php-xml php-zip -y
+```
+
+# Nginx Configuration 
 
 Cd into /var/www then create a directory in it. Assign ownership of the current system user as the owner of the directory 
 
