@@ -67,21 +67,23 @@ sudo apt install php-fpm php-mysql php-cli php-curl php-gd php-mbstring php-xml 
 
 # Nginx Configuration 
 
-Cd into /var/www then create a directory in it. Assign ownership of the current system user as the owner of the directory 
+Create a file directory for the app in `/var/www`. Assign ownership of the current system user as the owner of the directory.
 
-```
-sudo mkdir /lemp
-sudo chown $USER:$USER /var/www/lemp
+```sh
+cd /var/www/
+sudo mkdir -p lemp
+sudo chown $USER:$USER -R /var/www/lemp
 ```
 
-Create a configuration file in Nginx's sites-available directory. Paste in the bare-bone configuration:
+Create a configuration file in Nginx's sites-available directory. Paste in the below bare-bone configuration:
 
-```
+```sh
 cd /etc/nginx/sites-available
-sudo nano /lemp
+sudo nano lemp
 ```
 
-```
+Here is the configurati
+```sh
 server {
     listen 80;
     server_name <public-ip-address> <website-url>;
@@ -105,7 +107,7 @@ server {
 }
 ```
 NB:
-- The first block of location instrycts nginx to return a 404 error after trying to check directives for the file but cant be found, the second block indicates the php dependencies installed while the third block denies it to display any file with .htaccess to the user on the site, incase of a misconfiguration.
+- The first block of location instructs Nginx to return a 404 error after trying to check directives for the file but cant be found, the second block indicates the php dependencies installed while the third block denies it to display any file with .htaccess to the user on the site, incase of a misconfiguration.
 
 - listen - defines the protocol to listen on, incase of ssl 443 will be used instead.
 
@@ -115,63 +117,60 @@ NB:
 
 The next step to do is to enable the config file to the ../sites-enabled directory. Run the command:
 NB : That's l as in L for Lion
-```
-sudo ln -s /etc/nginx/sites-available/projectLEMP /etc/nginx/sites-enabled/
+
+```sh
+sudo ln -s /etc/nginx/sites-available/lemp /etc/nginx/sites-enabled/
 ```
 
-NB: This command is different for enabling sites-available for the Apache server, A2ensite command will be used instead.
+NB: This command is similar for enabling sites for the Apache server, A2ensite command will be used instead.
 
 Run the below commands to check for errors in the configuration file, to unlink the default nginx file and to reload nginx. You should get a ok message on success.
 
-```
+```sh
 sudo nginx -t
 sudo unlink /etc/nginx/sites-available/default
 sudo systemctl restart nginx
 ```
-cd into /var/www/lemp to input a test page for nginx default page, create an index.html file and edit with an example code below
 
-```
+In the `/var/www/lemp` directory, create a test index.html file, with a simple code below.
+
+```html
 <html>
 <p>Hello World</p>
 </html>
 ```
 
-Go to your web browser, view with your public ip address irrespective of the port number.
+Visit the public ip address on your web browser, the content in the html file should be shown. To confirm if php is corresponding, create an `index.php` file in the `/var/www/lemp` with the below code:
 
-To confirm if php is corresponding. Create an index.php file in the pwd /var/www/lemp with the below code:
-
-```
+```php
 <?php
 phpinfo();
 ```
 
-Access the page with <your-public-ipaddress>/index.php
+Access the page with <your-public-ipaddress>/index.php. Ensure to remove the file as it contains important info about your server.
 
-ensure to remove the file as it contains important info about your server
-```
+```sh
 sudo rm /var/www/lemp/index.php
 ```
 
-# RETRIEVE DATA FROM MYSQL DB
-Here we are creating a DB with access to Nginx to query from the DB and display it.
+# FETCH DATA FROM MYSQL DB
+Here we are creating a DB with access to Nginx to query from the DB and display it. Create a database and a user assigned to the database. Login to the MYSQL create a DB and confirm the created DB.
 
-Create a database and a user assigned to the database. Login to the MYSQL create a DB and confirm the created DB.
-
-```
+```sh
 mysql > CREATE DATABASE testdb;
 mysql > SHOW DATABASES;
 ```
 
-Create a new user and grant priviledges on the database, this gives the user full priviledges on the newly created db.
+Then create a new user and grant priviledges on the database to the user, this gives the user full priviledges on the newly created db.
 
-```
+```sh
 mysql > CREATE USER 'oxblixx'@'%' IDENTIFIED WITH mysql_native_password BY 'password-login';
 mysql > GRANT ALL ON testdb.* TO 'oxblixx'@'%';
 ```
 
 Exit the MYSQL console and try to login the new user to confirm the credentials.
 
-```
+```sh
 mysql > sudo mysql -u oxblixx -p
 ```
 
@@ -180,7 +179,7 @@ mysql > sudo mysql -u oxblixx -p
 
 Create a table named todo_list. Run the below commands to create a table, then insert rows into the table
 
-```
+```sh
 mysql> CREATE TABLE testdb.todo_list (
    --> item_id INT AUTO_INCREMENT,
    --> content VARCHAR(255),
