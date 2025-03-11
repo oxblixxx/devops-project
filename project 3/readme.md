@@ -1,89 +1,82 @@
-# Implementing a MERN stack 
+# Deploying a MERN Stack Application on AWS
+This project demonstrates how to deploy a MERN (MongoDB, Express.js, React, Node.js) stack application on an AWS EC2 instance. The application to be deployed is a simple To-Do List that allows users to create, view, and delete tasks. Below is a step-by-step guide to setting up the environment, configuring the backend and frontend, and deploying the application.
 
-MERN stack = MongoDB, ExpressJS, ReactJS, Node.js
+---
+## Technologies Used
+- MongoDB: A NoSQL database used to store task data.
+- Express.js: A backend framework for building RESTful APIs.
+- React: A frontend library for building user interfaces.
+- Node.js: A JavaScript runtime environment for executing server-side code.
+- AWS EC2: A cloud computing service used to host the application.
+---
+## Setting up the MERN Environment
+1. Set Up an AWS EC2 Instance
+- Launch an EC2 instance on AWS.
+- Configure security groups to allow inbound traffic on ports:
+   - 22 (SSH): For connecting to the instance.
+   - 3000 (React): For accessing the frontend.
+   - 5000 (Express.js): For accessing the backend API.
 
-- MongoDB:  MongoDB is a cross-platform, document-oriented database program. 
+SSH into the instance using the private key generated
 
-- ExpressJS: Express.js is a web application framework for Node.js.
-
-- ReactJS: This is a javascript framework used to build the UI.
-
-- Node.js: Node.js is an open-source, cross-platform, JavaScript runtime environment that executes JavaScript code outside of a web browser.
-
-For this project, a simple to-do list app will be deployed.
-
-spin up an Ec2 instance on AWS, SSH into the instance.
-
-# SETTIN UP NODE.JS
-
-run the below commands to upgrade and update the ubuntu distro
-
+```sh
+ssh -i <key-pair-name> ubuntu@<ip-adddresss.
 ```
+
+2. Install Node.js
+Update and upgrade the Ubuntu distribution
+
+```sh
 sudo apt update -y && sudo apt upgrade -y
 ```
 
-to install nodejs, here is a link to the source ![repo](https://github.com/nodesource/distributions)
+To Install Node.js and npm follow the instructions from the [NodeSource repository](https://github.com/nodesource/distributions). Below is the command executed below, at the point of deploying this project, `NODE_MAJOR=20` was used.
 
-run the below command to Download and import the Nodesource GPG key:
-
-```
-sudo apt-get update
+```sh
 sudo apt-get install -y ca-certificates curl gnupg
 sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 ```
 
-create DEB repository:
+Afterwards, create the Node.js repository with the below commands:
 
-```
+```sh
 NODE_MAJOR=20
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 ```
 
-install node and npm:
+Then install Node.js and npm and verify the installation.
 
-```
+```sh
 sudo apt update -y && sudo apt upgrade -y
-sudo apt install nodejs npm -y 
+sudo apt install nodejs npm -y
 node -v
 npm -v
-```
-
-
-# CREATE A FILE DIRECTORY FOR THE TO-DO PROJECT:
-create a directory for the project:
 
 ```
+
+3. Set Up the Backend
+Create a project directory for the to-do-list app, then initialize NPM in that directory.
+
+```sh
 mkdir To-do
-```
-
-change directory to the created directory, intialize npm in that directory. Press enter repeatedly to accept default values, lastly press yes. Now there should be a package.json file in that directory
-
-```
 cd To-do
 npm init
-ls
 ```
 
-# INSTALLING EXPRESSJS
+Also setup  Express.js and dotenv:
 
-
-In the to-do directory, Install express and dotenv module using npm:
-
-```
+```sh
 npm install express dotenv
 ```
 
-create an index.js file, open it a text editor:
+Finally we installed the dependecies for the MERN stack, now let's proceed to setup the codes. Create an index.js file and add the backend code:
 
-```
-touch index.js
+```sh
 nano index.js
 ```
 
-Put the below code in index.js.
-
-```
+```js
 const express = require('express');
 require('dotenv').config();
 
@@ -106,38 +99,32 @@ console.log(`Server running on port ${port}`)
 });
 ```
 
-save the file. Now, it's time to start the express server, in the directory of the to-do app. There should be a display of "Server running on port 5000". We specified that both in the above code. 
+It's time to start the express server, in the directory of the to-do app. 
 
-```
+```sh
 node index.js
 ```
 
-proceed to the security groups of your EC2 instance, allow in-bound rules from port 5000.
-
-open your browser. access the express instance with your <public-ip-address>:5000. Remember we specified port 5000.
-
+Open your browser. access the express instance with your :5000. Remember we specified port 5000.
 
 ![express](express.jpg)
-
+---
 
 ## ROUTES
- Routes are used to define how the application will respond to different requests. What actions do you want your applications to take? For the to-do app, we want to do:
+Routes are used to define how the application will respond to different requests. What actions do you want your applications to take? For the to-do app, we want to do:
 
-1. Create a new task
-2. See list of all created tasks
-3. Delete tasks
+- Create a new task
+- See list of all created tasks
+- Delete tasks
+For each task, routes needs to be created for the endpoints. The tasks will be associated with the endpoints using different http requests method(GET, PUT, POST, DELETE). In the to-do folder, Make a folder routes and create an api file in the directory and update the `api.js` file with the below code.
 
-For each task, routes needs to be created for the endpoints. The tasks will be associated with the endpoints using different http requests method(GET, PUT, POST, DELETE). In the to-do folder, Make a folder routes and create an api file in the directory.
-
-```
+```sh
 mkdir routes
 cd routes
 touch api.js
 ```
 
-copy the below code into the created file.
-
-```
+```js
 const express = require ('express');
 const router = express.Router();
 
@@ -156,27 +143,26 @@ router.delete('/todos/:id', (req, res, next) => {
 module.exports = router;
 ```
 
-# MODELS
+---
 
-Models help you to ensure that all documents in a collection have the same fields and that the values of those fields are of the correct type. This can help you to write cleaner, more efficient code and to avoid errors. 
+## MODELS
+Models help you to ensure that all documents in a collection have the same fields and that the values of those fields are of the correct type. This can help you to write cleaner, more efficient code and to avoid errors.
 
 Models provide a convenient way to perform CRUD (create, read, update, and delete) operations on documents. We will also use models to define the database schema.
 
 Change directory to the to-do folder, install mongoose which is a MongoDB library, it makes it easier to work with MongoDB.
 
-```
+```sh
 npm install mongoose
 ```
 
-In the to-do directory, create a folder for models && a file model.js.
+In the to-do directory, create a folder for models, a file named **model.js** and update model.js with the below code.
 
-```
+```sh
 mkdir models && nano model.js
 ```
 
-update the model.js app with the below code.
-
-```
+```js
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -196,7 +182,7 @@ module.exports = Todo;
 
 Remember we created a Routes folder earlier and created a file api.js in it. Update the api.js code to make use of the model. In short, delete the code and put in the below code.
 
-```
+```js
 const express = require ('express');
 const router = express.Router();
 const Todo = require('../models/model');
@@ -230,27 +216,19 @@ Todo.findOneAndDelete({"_id": req.params.id})
 module.exports = router;
 ```
 
-# SETTING UP MONGODB DATABASE
-
-Sign up for mLab [here](https://www.mongodb.com/atlas-signup-from-mlab) if you don't have an existing account, mLab offers database as a service. Follow the sign up process to create and verify your email.
-
-Create a shared database which is a free tier, choose the cloud provider which is AWS. Create a user for the database and a password, keep it handy, it will be needed in a bit.
-
-In the to-do directory create a .env file and add the connection string to connect to the database. Meanwhile, in the index.js file, we specifiend the process.env. Now we created a suit that.
+---
+4. Setting Up MongoDB
+Sign up for a MongoDB Atlas account. Create a free-tier cluster and configure a database user. Fetch the connection string, add the connection string to a .env file:
 
 ```
-cd to-do && nano .env
+cd to-do
+nano .env
+DB = 'mongodb+srv://<username>:<password>@cluster0.nhraeok.mongodb.net/?retryWrites=true&w=majority'
 ```
 
-Open the created DB base cluster, locate the connect button, choose a connection method which is Drivers, copy the connection string. Assign it to a variable
+Then update index.js with the below code
 
-```
-DB = 'mongodb+srv://ox:<password>@cluster0.nhraeok.mongodb.net/?retryWrites=true&w=majority"
-```
-
-then update the code in the index.js file with the below code.
-
-```
+```js
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -292,76 +270,70 @@ console.log(`Server running on port ${port}`)
 
 Then run command to see if the server is connected.
 
+```sh
+node index.js
 ```
-node index.js'
-```        
 
-if it's succesfully connected, it will  display "Database connected succesfully"
+If it's succesfully connected, it will display "Database connected succesfully"
 
+5. Set Up the Frontend
+Now the interface for the client to interact with the application via API whith ReactJS will be used for the frontend. In the root directory of to-do, run the command below:
 
-# FRONTEND SETUP
-
-Now the interface for the client to interact with the application via API whith ReactJS will be used for the frontend. 
-
-In the root directory of to-do, run the command,
-
-```
+```sh
 npx create-react-app todo-frontend
 ```
 
-After running this command, a new folder will be created.  Two dependencies will be installed.
+After running this command, a new folder will be created. Two dependencies also will be installed for use
 
-1. Concurently - With this installed, multiple commands can be run simultaneously on the same terminal.
+- Concurently - This allows multiple commands to be run simultaneously on the same terminal.
 
-```
+```js
 npm install concurrently --save-dev
 ```
 
-2. Install nodemon - It runs and monitors the server for changes and restarts it if there is any.
+- nodemon - It runs and monitors the server for changes and restarts it if there is any.
 
-```
+```js
 npm install nodemon --save-dev
 ```
 
 In the package.json file in the to-do directory, update the scripts block with the code below.
 
-```
+```json
 "scripts": {
 "start": "node index.js",
 "start-watch": "nodemon index.js",
 "dev": "concurrently \"npm run start-watch\" \"cd client && npm start\""
 },
 ```
+Thereafter, configure the proxy in the todo-frontend created with npx create-react-app. Add the below proxy block in the package.json file. NB- What this proxy does is to allow the application to be acessible from the server url `http://localhost:5000`
 
-Thereafter, configure proxy in the todo-frontend created with npx create-react-app.
-
-```
+```sh
 cd todo-frontend
 ls -al
 nano package.json
 ```
 
-Add the below proxy block in the package.json file. NB- What this proxy does is to allow the application to be acessible from the server url http://localhost:5000
-
-```
+```sh
 "proxy": "http://localhost:5000"
 ```
 
-Update the security group to allow inbound traffic from port 3000.
-
-Change directory to-do directory folder, run:
-
+```sh
+cd todo-frontend
+ls -al
+nano package.json
 ```
+
+Change directory to-do root folder, run:
+
+```sh
 npm run dev
 ```
 
-This should run the app on localhost:3000
-
-
-## CREATING REACT COMPONENTS
+# CREATING REACT COMPONENTS
 Remember we ran the command "npx create-react-app todo-frontend". From the to-do directory, move to the src folder and make a components folder:
 
-```
+```sh
 cd todo-frontend
 cd src
 mkdir components
@@ -370,13 +342,14 @@ cd components
 
 Create the files in the components folder, Todo.js, Input.js, ListTodo.js
 
-```
+```sh
 touch Todo.js Input.js ListTodo.js
 ```
 
-open the files with your favourite text editor, put in the below codes respectively:
+Open the files with your favourite text editor, put in the below codes respectively:
 
-## Todo.js
+**Todo.js**
+
 ```js
 import React, {Component} from 'react';
 import axios from 'axios';
@@ -435,7 +408,8 @@ let { todos } = this.state;
 export default Todo;
 ```
 
-## Input.js
+**Input.js**
+
 ```js
 import React, { Component } from 'react';
 import axios from 'axios';
@@ -484,8 +458,8 @@ return (
 export default Input
 ```
 
-## ListTodo
-```js
+**ListTodo**
+```
 import React from 'react';
 
 const ListTodo = ({ todos, deleteTodo }) => {
@@ -523,7 +497,7 @@ ls -al
 
 You should see App.css and App.js, we are going to update both files.
 
-## App.css
+**App.css**
 ```css
 .App {
 text-align: center;
@@ -620,9 +594,9 @@ Also, in the src directory open the index.css
 nano index.css
 ```
 
-Copy and paste the code below:
+Then Copy and paste the code below:
 
-```
+```css
 body {
 margin: 0;
 padding: 0;
@@ -642,7 +616,7 @@ monospace;
 }
 ```
 
-In the App.js
+In the App.js, update it with the below code
 
 ```js
 import React from 'react';
@@ -661,29 +635,17 @@ return (
 export default App;
 ```
 
-Change directory to the to-do folder directory.
+Now change the directory to the to-do folder root directory.
 
 ```
 cd ../..
 pwd
 ```
 
-When in the directory, run:
+When in the directory, run: `npm run dev`
 
-```
-npm run dev
-```
+If there all went well and there wsa no errors, we should have a fully functional to-do website.
+![to-dront](to_do-front.jpg)
 
-If there all went well and teher wsa no errors, we should have a fully functional to-do website.
-
-![to-do-website](to_do-front.jpg)
-
-Hurray!!!!
-We just deployed a MERN project on AWS.
-Ensure to delete created resources!
-
-
-
-
-
+Access the application in your browser at http://<public-ip>:3000.
 
