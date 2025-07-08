@@ -1,0 +1,1 @@
+As per documentation, everything worked tho https://docs.aws.amazon.com/ebs/latest/userguide/recognize-expanded-volume-linux.html?icmpid=docs_ec2_console, follow this guide, but then you need to modify volume to the required spce that you want, you do not need to shut down the instance!!! THen follow the docs!
