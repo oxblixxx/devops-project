@@ -1,8 +1,6 @@
-  GNU nano 6.2                                                                                                  gpt.sh                                                                                                           
 #!/bin/bash
-
 # user file
-user_file="user.csv"
+user_file="./user.csv"
 
 password=$(openssl rand -hex 8)
 
