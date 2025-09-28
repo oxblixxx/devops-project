@@ -1,19 +1,29 @@
 #!/bin/bash
-# user file
-user_file="./user.csv"
 
-password=$(openssl rand -hex 8)
+# Input file with raw names
+input="random_names.csv"
+# Output file with cleaned usernames
+user_file="usernames.txt"
 
-# Check if the user exists and create if it doesn't
-while user_name= read -r username; do
+# Generate valid Linux usernames:
+#  - convert to lowercase
+#  - replace spaces with underscores
+#  - remove carriage returns (\r)
+#  - remove duplicates
+cat "$input" | tr '[:upper:]' '[:lower:]' | tr -d '\r' | tr ' ' '_' | sort -u > "$user_file"
+
+# Loop through cleaned usernames and create users
+while read -r username; do
+    # Generate a random password for each user
+    password=$(openssl rand -hex 8)
+
     if id "$username" &>/dev/null; then
-        sleep 2
         echo "User '$username' already exists."
     else
         echo "User '$username' does not exist. Creating..."
-        sudo adduser "$username" &>/dev/null --home /home/$username --disabled-password --gecos "" && echo "$username:$password" | sudo chpasswd -c SHA256
-        echo "$username:$password"
-        sleep 2
-        echo "User '$username' created."
+        sudo adduser "$username" --home /home/$username --disabled-password --gecos "" &>/dev/null
+        echo "$username:$password" | sudo chpasswd -c SHA256
+        echo "✅ Created user: $username with password: $password"
     fi
+    sleep 2
 done < "$user_file"
